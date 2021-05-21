@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using SoftNetEksamen.Core.Interfaces;
+using SoftNetEksamen.Core.Middleware;
 using SoftNetEksamen.Features.Category.Data;
 using SoftNetEksamen.Features.Category.Models;
 using SoftNetEksamen.Features.Product.Data;
@@ -60,6 +61,8 @@ namespace SoftNetEksamen
 
       app.UseAuthorization();
 
+      app.UseMiddleware<ErrorHandlerMiddleware>();
+      
       app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
     }
   }
