@@ -12,10 +12,10 @@ namespace SoftNetEksamen.Features.Product.Data
 {
   public class ProductRepository : IRepository<Models.Product>
   {
-    private static readonly string ConnectionString =
+    public string ConnectionString =>
       @$"Data Source={Directory.GetCurrentDirectory()}\mydb.db;Version=3;foreign keys=True;";
 
-    private const string Sql = @"
+    public string Sql => @"
     CREATE TABLE IF NOT EXISTS [Product]
     (
         Id TEXT PRIMARY KEY,
@@ -42,17 +42,7 @@ namespace SoftNetEksamen.Features.Product.Data
       using var connection = new SQLiteConnection(ConnectionString);
       connection.ExecuteNonQuery(Sql);
     }
-
-    public async Task<Models.Product?> CreateAsync(Models.Product model)
-    {
-      model.Id = Guid.NewGuid();
-      
-      await using var connection = new SQLiteConnection(ConnectionString);
-      var id = await connection.InsertAsync(model);
-      
-      return id is null ? null : model;
-    }
-
+    
     public async Task<IEnumerable<Models.Product>> ListAsync()
     {
       await using var connection = new SQLiteConnection(ConnectionString);
@@ -65,26 +55,6 @@ namespace SoftNetEksamen.Features.Product.Data
       await using var connection = new SQLiteConnection(ConnectionString);
       var data = await connection.QueryAsync("[Product]", id);
       return data.Adapt<IEnumerable<Models.Product>>().FirstOrDefault();
-    }
-
-    public async Task<bool> UpdateAsync(Models.Product model)
-    {
-      await using var connection = new SQLiteConnection(ConnectionString);
-      var rows = await connection.UpdateAsync(model);
-      return rows > 0;
-    }
-
-    public async Task<Models.Product?> DeleteAsync(Guid id)
-    {
-      var data = await ReadAsync(id);
-      if (data is null)
-      {
-        return null;
-      }
-      
-      await using var connection = new SQLiteConnection(ConnectionString);
-      var rows = await connection.DeleteAsync<Models.Product>(id);
-      return rows > 0 ? data : null;
     }
   }
 }

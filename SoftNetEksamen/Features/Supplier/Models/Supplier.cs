@@ -1,8 +1,9 @@
 ﻿using System;
+using SoftNetEksamen.Core.Interfaces;
 
 namespace SoftNetEksamen.Features.Supplier.Models
 {
-  public class Supplier
+  public class Supplier : IModel
   {
     public Guid Id { get; set; }
     public string Name { get; set; }

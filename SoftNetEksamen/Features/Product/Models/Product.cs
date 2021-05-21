@@ -1,8 +1,9 @@
 ﻿using System;
+using SoftNetEksamen.Core.Interfaces;
 
 namespace SoftNetEksamen.Features.Product.Models
 {
-  public class Product
+  public class Product : IModel
   {
     public Guid Id { get; set; }
     public string Name { get; set; }
